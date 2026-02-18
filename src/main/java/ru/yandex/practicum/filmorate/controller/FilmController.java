@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -15,10 +16,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-
-    private final Map<Integer, Film> films = new HashMap<>();
     private int currentId = 1;
-
+    private final Map<Integer, Film> films = new HashMap<>();
     private static final LocalDate EARLIEST_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
     @GetMapping
@@ -28,7 +27,7 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film addFilm(@RequestBody Film film) {
+    public Film addFilm(@Valid @RequestBody Film film) {
         log.info("Запрос на добавление фильма: {}", film);
 
         validateFilm(film);
@@ -41,7 +40,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updateFilm(@RequestBody Film film) {
+    public Film updateFilm(@Valid @RequestBody Film film) {
         log.info("Запрос на обновление фильма: {}", film);
 
         if (!films.containsKey(film.getId())) {
